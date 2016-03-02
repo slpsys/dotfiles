@@ -1,0 +1,105 @@
+#!/bin/bash -e
+
+function check_lock_file {
+  local result=0
+  if [ -e $lock_file ]; then
+    result=1
+  fi
+  echo $result
+}
+
+function die_if_lock_file {
+  if [[ $(check_lock_file) -gt 0 ]]; then
+    echo "Lock file $lock_file exists! Please ensure EMR job is not still running."
+    exit 1
+  fi
+}
+
+function die_unless_lock_file {
+  if [[ $(check_lock_file) -eq 0 ]]; then
+    echo "No lock file $lock_file exists! Otherwise, nothing to do."
+    exit 1
+  fi
+}
+
+function read_cluster_id {
+  cat $lock_file | tr -d "\n "
+}
+
+function parse_cluster_id_from_response {
+  echo $@ | sed "s/^{[[:space:]]*\"ClusterId\":[[:space:]]*\"\(j-[[:alnum:]]*\)\"[[:space:]]*}[[:space:]]*/\1/"
+}
+
+function ssh {
+  die_unless_lock_file
+  local cluster_id=$(read_cluster_id)
+
+  echo "SSHing into $cluster_id..."
+  aws emr ssh --key-pair-file $key_pair_file --cluster-id $cluster_id
+}
+
+function actual_start {
+  aws emr create-cluster \
+    --ec2-attributes KeyName=$key_pair_name \
+    --region us-east-1 \
+    --tags lumos:usage="datascience" name="spark testing" \
+    --use-default-roles \
+    --release-label emr-4.3.0 \
+    --applications Name=Spark \
+    --log-uri $emr_log_path \
+    --enable-debugging \
+    --visible-to-all-users \
+    --instance-groups InstanceGroupType=MASTER,InstanceCount=1,InstanceType=$cluster_master_size InstanceGroupType=CORE,InstanceCount=$cluster_instance_count,InstanceType=$cluster_instance_size \
+    --no-auto-terminate
+}
+
+function start {
+  die_if_lock_file
+  echo "Starting cluster..."
+
+  local emr_output=$(actual_start)
+  local cluster_id=$(parse_cluster_id_from_response $emr_output)
+
+  echo "Cluster ID is $cluster_id."
+  echo $cluster_id > $lock_file
+  echo >> $lock_file
+}
+
+function stop {
+  die_unless_lock_file
+  local cluster_id=$(read_cluster_id)
+  aws emr terminate-clusters --cluster-ids $cluster_id
+  rm $lock_file
+}
+
+# Annoyingly warn if default vars not set
+err_msg="environment variable must be set!"
+key_pair_file=${SPARK_KEY_PAIR_FILE?$err_msg}
+key_pair_name=${SPARK_KEY_PAIR_NAME?$err_msg}
+emr_log_path=${SPARK_EMR_LOG_PATH?$err_msg}
+cluster_master_size=${SPARK_CLUSTER_MASTER_SIZE?$err_msg}
+cluster_instance_size=${SPARK_CLUSTER_INSTANCE_SIZE?$err_msg}
+cluster_instance_count=${SPARK_CLUSTER_INSTANCE_COUNT?$err_msg}
+
+if [ -z $SPARK_LOCK_FILE ]; then
+  SPARK_LOCK_FILE="$HOME/.spark_session.lock"
+fi
+
+lock_file=$SPARK_LOCK_FILE
+action=$1
+
+case $action in
+  start)
+    start
+    ;;
+  ssh)
+    ssh
+    ;;
+  stop)
+    stop
+    ;;
+  *)
+    echo "Don't know how to $action."
+    exit 1
+    ;;
+esac
