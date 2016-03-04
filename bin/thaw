@@ -1,0 +1,21 @@
+#!/bin/bash -e
+
+file_list=$(mktemp)
+if [ -z "$1" ]; then
+  echo "Usage: s3archive S3_PATH" >&2
+  exit 1
+fi
+s3_bucket=$(echo $1 | sed -E "s/^s3:\/\/([a-zA-Z0-9-]*)\/.*/\1/")
+s3_rel_path=$(echo $1 | sed -E "s/^s3:\/\/[a-zA-Z0-9-]*(\/.*)/\1/")
+s3_path="s3://$s3_bucket$s3_rel_path"
+
+aws s3 ls --recursive $s3_path | awk '{if ($4) print $4}' > $file_list
+
+for f in $(cat $file_list); do
+  aws s3api restore-object \
+    --bucket $s3_bucket \
+    --key $f \
+    --restore-request '{"Days":30}'
+done
+
+rm $file_list
