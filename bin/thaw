@@ -22,6 +22,7 @@ s3_path="s3://$s3_bucket$s3_rel_path"
 aws s3 ls --recursive $s3_path | awk '{if ($4) print $4}' > $file_list
 
 for f in $(cat $file_list); do
+  echo "Thawing $f..."
   aws s3api restore-object \
     --bucket $s3_bucket \
     --key $f \
