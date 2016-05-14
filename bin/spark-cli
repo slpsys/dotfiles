@@ -44,7 +44,7 @@ function actual_start {
     --region us-east-1 \
     --tags lumos:usage="datascience" name="spark testing" \
     --use-default-roles \
-    --release-label emr-4.3.0 \
+    --release-label emr-4.6.0 \
     --applications Name=Spark Name=Hive \
     --log-uri $emr_log_path \
     --enable-debugging \
