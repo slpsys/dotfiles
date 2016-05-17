@@ -10,3 +10,4 @@ export SPARK_EMR_LOG_PATH=s3://your-bucket/logs
 export SPARK_CLUSTER_MASTER_SIZE=r3.2xlarge
 export SPARK_CLUSTER_INSTANCE_SIZE=r3.2xlarge
 export SPARK_CLUSTER_INSTANCE_COUNT=10
+export SPARK_DEFAULTS_FILE=s3://your-bucket/spark-defaults.json

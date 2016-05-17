@@ -39,6 +39,12 @@ function ssh {
 }
 
 function actual_start {
+  if [ -z $SPARK_DEFAULTS_FILE ]; then
+    spark_defaults_command=""
+  else
+    spark_defaults_command="--configurations $SPARK_DEFAULTS_FILE"
+  fi
+
   aws emr create-cluster \
     --ec2-attributes KeyName=$key_pair_name \
     --region us-east-1 \
@@ -49,6 +55,7 @@ function actual_start {
     --log-uri $emr_log_path \
     --enable-debugging \
     --visible-to-all-users \
+    $spark_defaults_command \
     --instance-groups InstanceGroupType=MASTER,InstanceCount=1,InstanceType=$cluster_master_size InstanceGroupType=CORE,InstanceCount=$cluster_instance_count,InstanceType=$cluster_instance_size \
     --no-auto-terminate
 }
