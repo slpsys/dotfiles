@@ -38,6 +38,14 @@ function ssh {
   aws emr ssh --key-pair-file $key_pair_file --cluster-id $cluster_id
 }
 
+function ssh-tunnel {
+  die_unless_lock_file
+  local cluster_id=$(read_cluster_id)
+
+  echo "Creating SSH tunnel into $cluster_id..."
+  aws emr socks --key-pair-file $key_pair_file --cluster-id $cluster_id
+}
+
 function actual_start {
   if [ -z $SPARK_DEFAULTS_FILE ]; then
     spark_defaults_command=""
@@ -101,6 +109,9 @@ case $action in
     ;;
   ssh)
     ssh
+    ;;
+  ssh-tunnel)
+    ssh-tunnel
     ;;
   stop)
     stop
