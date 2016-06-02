@@ -18,7 +18,7 @@ To view the Spark shell application UI, first set up foxyproxy according to the 
 
 <img width="1388" alt="screenshot" src="https://cloud.githubusercontent.com/assets/19576834/15733268/1bc40ae0-2839-11e6-8cc4-b9db8561d8ab.png">
 
-Once that is set up and the ssh-tunnel established, just point your browser that you configured foxyproxy with, to the following:
+Once that is set up and the ssh-tunnel established, point your browser that you configured foxyproxy with, to the following:
 
 `http://<master-node>:8088`
 
@@ -32,7 +32,7 @@ If you have spark-shell running, you should see something like the following:
 
 <img width="1423" alt="screenshot" src="https://cloud.githubusercontent.com/assets/19576834/15733354/013bbc58-283a-11e6-81d3-ef63e7a32fcb.png">
 
-Just click on the link to `ApplicationMaster` to access the Spark shell application UI.
+Click on the link to `ApplicationMaster` to access the Spark shell application UI.
 
 ## thaw
 
