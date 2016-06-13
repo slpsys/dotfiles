@@ -52,10 +52,13 @@ function actual_start {
   else
     spark_defaults_command="--configurations $SPARK_DEFAULTS_FILE"
   fi
+  
+  full_name=$(finger `whoami` | awk -F: '{ print $3 }' | head -n1 | sed 's/^ //')
 
   aws emr create-cluster \
     --ec2-attributes KeyName=$key_pair_name \
     --region us-east-1 \
+    --name "Development Cluster - $full_name" \
     --tags lumos:usage="datascience" name="spark testing" \
     --use-default-roles \
     --release-label emr-4.7.0 \
