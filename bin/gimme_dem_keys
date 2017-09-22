@@ -1,0 +1,37 @@
+#!/bin/bash -e
+
+fatal() {
+  echo $1 >&2
+  exit 1
+}
+
+user=$1
+if [[ -z $user ]]
+then 
+  fatal "Usage: $0 USER"
+fi
+
+url="https://github.com/$user.keys"
+code=$(curl -s -o /dev/null -w "%{http_code}" $url)
+
+if [[ $code == "404" ]]
+then 
+  fatal "Could not find keys for user: $user"
+fi
+
+set -f
+IFS='
+'
+keys=$(curl -s $url)
+buffer_file=$(mktemp)
+
+for key in $keys
+do
+  echo $key > $buffer_file
+  ssh-keygen -E md5 -lf $buffer_file
+done
+
+unset IFS
+set +f
+# rm -f $buffer_file
+
