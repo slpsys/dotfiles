@@ -1,0 +1,17 @@
+#!/bin/bash -e
+
+DOTFILES_SOURCE=$HOME/github/dotfiles
+PROFILE_DEST=$HOME/.bash_profile_includes
+
+# Copy over profile includes
+cp -R $DOTFILES_SOURCE/bash_profile_includes $PROFILE_DEST
+
+# Copy over bin/ scripts
+cp -R $DOTFILES_SOURCE/bin/* $HOME/bin
+
+for dotfile in $DOTFILES_SOURCE/user_home_dir/dotfiles/*
+do
+    name=$(basename $dotfile)
+    cp $dotfile $HOME/.$name
+done
+

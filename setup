@@ -1,0 +1,11 @@
+#!/bin/bash -e
+
+# TODO: should probably warn..
+
+cp .bash_profile $HOME/.bash_profile
+
+BPI=$HOME/.bash_profile_includes
+mkdir -p $BPI
+
+cp bash_profile_includes/.update $BPI
+

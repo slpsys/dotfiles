@@ -1,0 +1,6 @@
+[alias]
+    co = checkout
+    br = branch
+    lo = log --oneline
+	  st = status
+
