@@ -2,5 +2,5 @@
     co = checkout
     br = branch
     lo = log --oneline
-	  st = status
-
+    st = status
+    cleanup = f { git branch --merged | grep -v master | xargs git branch -d } ; f()
