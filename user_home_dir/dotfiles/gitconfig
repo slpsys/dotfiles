@@ -12,6 +12,6 @@
 [push]
   default = upstream
 [user]
-	name = Marc Bollinger
-	email = marc@badfriend.org
-	username = slpsys
+  name = Marc Bollinger
+  email = marc@badfriend.org
+  username = slpsys
