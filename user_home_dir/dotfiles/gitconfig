@@ -1,6 +1,17 @@
 [alias]
-    co = checkout
-    br = branch
-    lo = log --oneline
-    st = status
-    cleanup = "!f() { git branch --merged | grep -v master | xargs git branch -d; }; f"
+  co = checkout
+  br = branch
+  lo = log --oneline
+  st = status
+  cleanup = "!f() { git branch --merged | grep -v master | xargs git branch -d; }; f"
+  track = "!f() { git fetch ; git checkout $1 ; }; f"
+[core]
+  editor = vim
+  whitespace = fix,-indent-with-non-tab,trailing-space,cr-at-eol
+  excludesfile = ~/.gitignore
+[push]
+  default = upstream
+[user]
+  name = Marc Bollinger
+  email = marc@badfriend.org
+  username = slpsys
