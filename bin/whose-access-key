@@ -1,0 +1,13 @@
+#!/bin/bash
+
+key=$1
+users=$(aws iam list-users | perl -lne 's/^.*UserName\"\: \"([^\"]+)\".*$/print $1/e;')
+
+for u in $users
+do
+  aws iam list-access-keys --user-name $u | grep -B 1 $key
+  if [ $? == 0 ]
+  then
+    exit
+  fi
+done
