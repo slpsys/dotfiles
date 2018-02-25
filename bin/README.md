@@ -2,6 +2,7 @@
   * [spark-cli](#spark-cli)
   * [thaw](#thaw)
   * [gimme-dem-keys](#gimme-dem-keys)
+  * [whose-access-key](#whose-access-key)
 
 <a name="spark-cli" />
 
@@ -45,11 +46,15 @@ Zeppelin Notebook can be accessed by going to:
  
 `http://<master-node>:8890`
 
+Requires the [AWS CLI](https://aws.amazon.com/cli/).
+
 <a name="thaw" />
 
 ## thaw
 
 Apparently, while the AWS Console allows you to select groups of files in the S3 browser to restore from Glacier to normal S3 storage, it does _not_ allow you to select directories to recursively walk. `thaw` allows you to specify an S3 path, and it will individually begin restoration from Glacier to S3 for all files "below" the given path in the logical "directory" "structure" (all of this is really key-based, it's not a real directory). Anyway, it works just like any S3 recursive operation.
+
+Requires the [AWS CLI](https://aws.amazon.com/cli/).
 
 <a name="gimme-dem-keys" />
 
@@ -72,3 +77,11 @@ Could not find keys for user: asdlsdlkfjs
 2048 MD5:64:e5:f2:13:4a:fc:67:1d:4d:f7:dc:bb:64:b5:0b:43 no comment (RSA)
 2048 MD5:c5:07:42:f5:1e:78:dc:86:45:09:35:a6:85:75:54:cf no comment (RSA)
 ```
+
+<a name="whose-access-key" />
+
+## whose-access-key
+
+On occasion, when inspecting an application's deployment secrets, I'll find an AWS IAM credential pair, and just want to confirm who the application is authenticating as. This simple script just queries the CLI to find out. 
+
+Requires the [AWS CLI](https://aws.amazon.com/cli/).
