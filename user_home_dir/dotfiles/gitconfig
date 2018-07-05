@@ -1,16 +1,33 @@
 [alias]
-  co = checkout
-  br = branch
-  lo = log --oneline
   st = status
-  cleanup = "!f() { git branch --merged | grep -v master | xargs git branch -d; }; f"
-  track = "!f() { git fetch ; git checkout $1 ; }; f"
+  di = diff
+  co = checkout
+  ci = commit
+  br = branch
+  sta = stash
+  llog = log --date=local
+  lo = log --oneline
+  track = "!f() { git branch --track $1 origin/$1 && git checkout $1; }; f"
+  cleanup = "!f() { git branch --merged | grep -v master | grep -v \\* | xargs git br -d; }; f"
+  refresh = "!f() { git checkout master; git pull; }; f"
+[apply]
+  whitespace = nowarn
+[branch]
+  autosetupmerge = true
+[color]
+  branch = auto
+  diff = auto
+  interactive = auto
+  status = auto
+  ui = auto
 [core]
   editor = vim
   whitespace = fix,-indent-with-non-tab,trailing-space,cr-at-eol
   excludesfile = ~/.gitignore
+[credential]
+  helper = osxkeychain
 [push]
-  default = upstream
+  default = current
 [user]
   name = Marc Bollinger
   email = marc@badfriend.org
