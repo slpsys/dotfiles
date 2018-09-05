@@ -57,12 +57,13 @@ function actual_start {
 
   aws emr create-cluster \
     --ec2-attributes KeyName=$key_pair_name \
+    --ec2-attributes SubnetId=subnet-0ce4437b \
     --region us-east-1 \
     --name "Development Cluster - $full_name" \
     --tags lumos:usage="datascience" name="spark testing" \
     --use-default-roles \
-    --release-label emr-4.7.0 \
-    --applications Name=Spark Name=Hive Name=Zeppelin-Sandbox \
+    --release-label emr-5.9.0 \
+    --applications Name=Spark Name=Hive \
     --log-uri $emr_log_path \
     --enable-debugging \
     --visible-to-all-users \
