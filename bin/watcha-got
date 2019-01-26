@@ -1,0 +1,7 @@
+#!/bin/bash -ew
+
+aws ec2 describe-instances | \
+  grep InstanceType        | \
+  awk '{print $2}'         | \
+  tr -d '\",'              | \
+  perl -MData::Dumper -lne '$t{$_}++; $t++; END {print Dumper(\%t) . "Total Nodes: $t" }'
