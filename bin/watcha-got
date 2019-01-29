@@ -4,4 +4,4 @@ aws ec2 describe-instances | \
   grep InstanceType        | \
   awk '{print $2}'         | \
   tr -d '\",'              | \
-  perl -MData::Dumper -lne '$t{$_}++; $t++; END {print Dumper(\%t) . "Total Nodes: $t" }'
+  perl -lne '$t{$_}++; $t++; END { foreach (sort keys %t) { print "$_\t=> $t{$_}" } print "Total Nodes: $t" }'
