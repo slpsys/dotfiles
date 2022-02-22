@@ -1,0 +1,51 @@
+
+export GIT_PAGER=cat
+export PATH=$PATH:$HOME/bin
+export PATH=$PATH:$HOME/.gem/ruby/2.6.0/bin
+
+okta-login() {
+    if [[ -z "$1" ]]; then
+        >&2 echo 'Usage: okta-login <profile>';
+        return 1;
+    fi
+    export OKTA_PROFILE=$1
+    export AWS_PROFILE=$1_source
+    ~/.okta/login
+}
+
+okta-profiles () {
+    cat $HOME/.okta/profiles
+}
+
+ie-standup() {
+    ruby -e 'puts %w(name).shuffle.join("\n")'
+}
+
+ds-standup() {
+    ruby -e 'puts %w(name).shuffle.join("\n")'
+}
+
+dx-standup() {
+    ruby -e 'puts %w(name).shuffle.join("\n")'
+}
+minus () {
+    grep -v $@
+}
+
+alias aws=aws2
+alias tf=terraform
+alias gti=git
+alias cat=bat
+alias du=duff
+
+export OKTA_USERNAME="${USER}"
+# export OKTA_PASSWORD_CMD="security find-generic-password -a ${OKTA_USERNAME} -s okta-aws-cli -w"
+source ~/.okta/okta-login-shell-function
+
+export PATH="/usr/local/opt/scala@2.11/bin:$PATH"
+export PATH="/usr/local/opt/postgresql@11/bin:$PATH"
+
+export LDFLAGS="-L/usr/local/opt/openssl/lib"
+export CPPFLAGS="-I/usr/local/opt/openssl/include"
+
+unset AWS_PROFILE
