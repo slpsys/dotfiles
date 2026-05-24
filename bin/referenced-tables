@@ -1,0 +1,4 @@
+#!/bin/bash
+
+sqlfluff parse --dialect bigquery -f json $1 | jq '..|.table_reference? | select(. != null) | (select(.[].dot?) | .[-3].naked_identifier + .[-2].dot + .[-1].naked_identifier), (select(.quoted_identifier?) | .quoted_identifier | gsub("`"; ""))'
+

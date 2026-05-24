@@ -1,0 +1,22 @@
+#!/bin/bash -e
+
+# Note that the question file accompanying this script came from 
+# Jason Evanish's excellent blog post, the original text of which can
+# be which can be found here:
+# 
+# https://jasonevanish.com/2014/05/29/101-questions-to-ask-in-1-on-1s/
+
+# Number of questions to ask
+NUM_QUESTIONS=3
+
+# Location of 101 1-on-1 questions file
+QUESTION_FILE=$HOME/bin/1-1.questions.txt
+
+len=$(($(wc -l $QUESTION_FILE | awk '{print $1}') - 1))
+
+for ((i=0;i<$NUM_QUESTIONS;i++))
+do
+  n=$(($RANDOM % $len))
+  tail -n+$n $QUESTION_FILE | head -1
+done
+
