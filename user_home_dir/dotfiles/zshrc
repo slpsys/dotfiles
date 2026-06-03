@@ -1,0 +1,59 @@
+# History settings (env vars must be set before history is used)
+HISTSIZE=10000
+SAVEHIST=10000
+HISTFILE=~/.zsh_history
+setopt SHARE_HISTORY HIST_IGNORE_DUPS HIST_IGNORE_SPACE
+
+# Shell behavior
+setopt AUTO_CD CORRECT
+
+# Emacs-style keybindings (default, but make it explicit)
+bindkey -e
+
+# Home / End
+bindkey "^[[H"   beginning-of-line    # Home
+bindkey "^[[F"   end-of-line          # End
+bindkey "^[[1~"  beginning-of-line    # Home (alt sequence)
+bindkey "^[[4~"  end-of-line          # End  (alt sequence)
+
+# Useful neighbors you probably also miss from OMZ:
+bindkey "^[[3~"  delete-char          # Forward Delete (fn+Delete on Mac)
+bindkey "^[[1;5C" forward-word        # Ctrl+Right
+bindkey "^[[1;5D" backward-word       # Ctrl+Left
+bindkey "^[^?"   backward-kill-word   # Option+Delete (delete word back)
+
+## PATH Manip
+export PATH=$PATH:$HOME/.local/bin
+export PATH=$PATH:$HOME/bin
+
+# Completion system
+autoload -Uz compinit && compinit
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|=*' 'l:|=* r:|=*'
+zstyle ':completion:*' menu select
+
+# Plugins (autosuggestions before syntax-highlighting)
+source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+## Environment Installs
+eval "$(starship init zsh)"
+eval "$(zoxide init zsh)"
+
+## eza aliases
+alias ls='eza --icons'
+alias ll='eza -l --icons --git'
+alias la='eza -la --icons --git'
+alias lt='eza --tree --level=2 --icons'
+
+## Misc
+export GIT_PAGER=cat
+alias gti=git
+alias cat=bat
+
+export OKTA_USE_AWS_SSO=1
+
+source ~/.okta/okta-login-shell-function
+
+export PATH=/usr/local/go/bin:$PATH
+export PATH=/Users/mbollinger/.local/bin:$PATH
+export PATH=/Users/mbollinger/go/bin:$PATH
